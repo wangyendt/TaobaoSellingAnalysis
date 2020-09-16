@@ -59,7 +59,9 @@ def main():
         item_data = item_data[['订单编号', '口味', '发货数量']]
     result = pd.merge(order_data, item_data, 'outer', ['订单编号'])
     result = result.loc[result['订单状态'] == '卖家已发货，等待买家确认', :]
-    result.to_excel('result.xlsx')
+    if not os.path.exists('result'):
+        os.makedirs('result')
+    result.to_excel('result/result.xlsx')
 
 
 if __name__ == '__main__':
