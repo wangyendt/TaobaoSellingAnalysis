@@ -33,8 +33,6 @@ def extract_sending_num(info: str):
 
 
 def main():
-    root = 'rawdata'
-    date = '20200916'
     remained_column = ['订单编号', '买家会员名', '买家支付宝账号', '支付单号',
                        '买家实际支付金额', '订单状态', '收货人姓名', '收货地址 ',
                        '联系手机', '订单付款时间 ', '物流单号 ']
@@ -70,5 +68,7 @@ def main():
 
 
 if __name__ == '__main__':
+    root = 'rawdata'
+    date = '20200916'
     delivering_date = '20200914->20200915'
     main()
