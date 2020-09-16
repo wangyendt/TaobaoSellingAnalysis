@@ -60,6 +60,7 @@ def main():
         item_data = item_data[['订单编号', '口味', '发货数量']]
     result = pd.merge(order_data, item_data, 'outer', ['订单编号'])
     result = result.loc[result['订单状态'] == '卖家已发货，等待买家确认', :]
+    result['发货日期'] = delivering_date
 
     save_dir = 'result'
     save_file_name = order_list_file[order_list_file.rindex('\\') + 1:order_list_file.rindex('.')]
@@ -69,4 +70,5 @@ def main():
 
 
 if __name__ == '__main__':
+    delivering_date = '20200914->20200915'
     main()
