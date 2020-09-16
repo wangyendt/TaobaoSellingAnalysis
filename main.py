@@ -48,6 +48,7 @@ def main():
         print('未找到宝贝报表')
         return
     item_list_file = item_list_file[0]
+
     with open(order_list_file, 'rb') as olf:
         order_data = pd.read_excel(olf, dtype=str)
         order_data = order_data[remained_column]
@@ -59,9 +60,12 @@ def main():
         item_data = item_data[['订单编号', '口味', '发货数量']]
     result = pd.merge(order_data, item_data, 'outer', ['订单编号'])
     result = result.loc[result['订单状态'] == '卖家已发货，等待买家确认', :]
-    if not os.path.exists('result'):
-        os.makedirs('result')
-    result.to_excel('result/result.xlsx')
+
+    save_dir = 'result'
+    save_file_name = order_list_file[order_list_file.rindex('\\') + 1:order_list_file.rindex('.')]
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    result.to_excel(f'{save_dir}/{save_file_name}.xlsx')
 
 
 if __name__ == '__main__':
