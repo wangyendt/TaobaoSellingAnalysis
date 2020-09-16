@@ -70,6 +70,6 @@ def main():
 
 if __name__ == '__main__':
     root = 'rawdata'
-    date = '20200916'
-    delivering_date = '20200914->20200915'
+    date = '20200916'  # 存放原始数据的时期目录
+    delivering_date = '20200914->20200915'  # 发货日期列
     main()
