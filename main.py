@@ -65,6 +65,7 @@ def main():
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     result.to_excel(f'{save_dir}/{save_file_name}.xlsx')
+    print(f'结果已经保存到{save_dir}/{save_file_name}.xlsx')
 
 
 if __name__ == '__main__':
