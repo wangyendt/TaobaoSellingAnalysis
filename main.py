@@ -25,7 +25,7 @@ def extract_sending_num(info: str):
     if res:
         return int(res[0])
     else:
-        res = re.findall(r'\*(\d+?)', info)
+        res = re.findall(r'\*(\d+)', info)
         if not res:
             return 0
         else:
