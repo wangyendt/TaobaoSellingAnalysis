@@ -126,5 +126,6 @@ dmypy.json
 
 
 .idea/
-*.xlsx
-*.csv
+#*.xlsx
+#*.csv
+*.DS_Store

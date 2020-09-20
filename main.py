@@ -25,7 +25,7 @@ def extract_sending_num(info: str):
     if res:
         return int(res[0])
     else:
-        res = re.findall(r'\*(\d+)【', info)
+        res = re.findall(r'\*(\d+?)', info)
         if not res:
             return 0
         else:
@@ -35,13 +35,13 @@ def extract_sending_num(info: str):
 def main():
     remained_column = ['订单编号', '买家会员名', '买家支付宝账号', '支付单号',
                        '买家实际支付金额', '订单状态', '收货人姓名', '收货地址 ',
-                       '联系手机', '订单付款时间 ', '物流单号 ']
-    order_list_file = list_all_files(root, [date, '.xlsx'])
+                       '联系手机', '订单付款时间 ', '物流单号 ', '宝贝种类 ']
+    order_list_file = list_all_files(os.path.join(root, date), [date, '.xlsx'])
     if not order_list_file:
         print('未找到订单报表')
         return
     order_list_file = order_list_file[0]
-    item_list_file = list_all_files(root, [date, '.csv'])
+    item_list_file = list_all_files(os.path.join(root, date), [date, '.csv'])
     if not item_list_file:
         print('未找到宝贝报表')
         return
@@ -49,6 +49,7 @@ def main():
 
     with open(order_list_file, 'rb') as olf:
         order_data = pd.read_excel(olf, dtype=str)
+        # print(order_data.columns)
         order_data = order_data[remained_column]
     with open(item_list_file, 'rb') as ilf:
         item_data = pd.read_csv(ilf, dtype=str, encoding="gbk")
@@ -59,9 +60,13 @@ def main():
     result = pd.merge(order_data, item_data, 'outer', ['订单编号'])
     result = result.loc[result['订单状态'] == '卖家已发货，等待买家确认', :]
     result['发货日期'] = delivering_date
+    result['发货数量'] = result['发货数量'].astype(int) * result['宝贝种类 '].astype(int)
+    result = result.drop('宝贝种类 ', axis=1)
 
-    save_dir = 'result'
-    save_file_name = order_list_file[order_list_file.rindex('\\') + 1:order_list_file.rindex('.')]
+    save_dir = '保存结果'
+    save_file_name = order_list_file[len(root) + 1:order_list_file.rfind('.')].replace('\\', '_').replace('/', '_')
+    # save_file_name = order_list_file[max(order_list_file.rfind('\\'),
+    #                                      order_list_file.rfind('/')) + 1:order_list_file.rindex('.')]
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     result.to_excel(f'{save_dir}/{save_file_name}.xlsx')
@@ -69,7 +74,7 @@ def main():
 
 
 if __name__ == '__main__':
-    root = 'rawdata'
-    date = '20200916'  # 存放原始数据的时期目录
-    delivering_date = '20200914->20200915'  # 发货日期列
+    root = '原始数据'
+    date = '20200918'  # 存放原始数据的时期目录
+    delivering_date = '20200916->20200917'  # 发货日期列
     main()
